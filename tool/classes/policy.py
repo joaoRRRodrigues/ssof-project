@@ -1,11 +1,11 @@
 # Lab 2
-from classes.pattern import Pattern
-from classes.multi_label import MultiLabel
+from pattern import Pattern
+from multi_label import MultiLabel
+
 
 class Policy:
 	def __init__(self, patterns: list):
 		self.patterns = patterns	# List of all the patterns
-
 
 	def get_vulnerabilities_by_source(self, source: str):
 		return [pattern.get_vulnerability() for pattern in self.patterns if source in pattern.get_sources()]
@@ -26,7 +26,6 @@ class Policy:
 				illegal_multilabel.add_label(vulnerability_name, label)
 		
 		return illegal_multilabel
-
 
 	### Print
 	def __str__(self):

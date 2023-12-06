@@ -1,6 +1,7 @@
 # Lab 1
-from classes.label import Label
-from classes.pattern import Pattern
+from label import Label
+from pattern import Pattern
+
 
 class MultiLabel:
 	def __init__(self, vulnerability_names: list):

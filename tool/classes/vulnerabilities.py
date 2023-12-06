@@ -1,6 +1,7 @@
 # Lab 2
 from multi_label import MultiLabel
 
+
 class Vulnerability:
 	def __init__(self, name: str, source: list, sink: list, unsanitized_flows: bool, sanitized_flows: list):
 		self.params = {
@@ -14,6 +15,7 @@ class Vulnerability:
 	### Print
 	""" def __str__(self):
 		return "Vulnerability" """
+
 
 class Vulnerabilities:
 	def __init__(self):

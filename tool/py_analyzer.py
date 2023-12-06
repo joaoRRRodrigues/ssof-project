@@ -4,6 +4,9 @@ import ast
 import astexport.export
 import os
 
+from classes.pattern import Pattern
+
+
 def read_slice(filename):
 	# Read slice code from file
 	with open(filename, "r") as f:
@@ -13,8 +16,6 @@ def read_slice(filename):
 	if code is None:
 		print("Error: Invalid slice format")
 		exit(1)
-
-
 
 	a = astexport.export.export_dict(ast.parse(code))
 	b = json.dumps(a)
@@ -27,7 +28,7 @@ def read_patterns(filename):
 	try:
 		with open(filename, "r") as f:
 			patterns = json.load(f)
-			#print(patterns)
+			# print(patterns)
 			a = patterns[0].get('vulnerability')
 			print(a)
 	except ValueError:
@@ -39,13 +40,17 @@ def read_patterns(filename):
 		print("Error: Invalid patterns format")
 		exit(1)
 
-	return patterns
+	all_patterns = []
+	for p in patterns:
+		all_patterns.append(Pattern(p.get("vulnerability"), p.get("sources"), p.get("sanitizers"),
+									p.get("sinks"), p.get("implicit")))
+	return all_patterns
 
 
 def analyze(dicts, patterns):
 	# Using the same terms as in Python Parser the mandatory
 	# constructs are those associated with nodes of type
-	#           
+	#
 	#           ::Expressions::
 	# Constant
 	# Name
@@ -70,11 +75,10 @@ def analyze(dicts, patterns):
 	# < FLOWS >: := "none" | < FLOW > | < FLOW >, < FLOWS >
 	# < FLOW >: := [ < SANITIZERS >]
 	# < SANITIZERS >: := (< STRING >, < INT >) | (< STRING >, < INT >), < SANITIZERS >
-	return 0
+	return {}
 
 
 def generate_output(vulnerabilities: dict):
-
 	output = []
 
 	for vulnerability_name, vulns_list in vulnerabilities.items():
@@ -84,12 +88,14 @@ def generate_output(vulnerabilities: dict):
 
 
 def write_output(output, slice_filename):
+
 	# Generate output filename
-	output_filename = f"./output/{slice_filename}.output.json"
+	output_filename = f"./output/{os.path.basename(slice_filename)}.output.json"
 
 	# Write results to output file
-	with open(output_filename, "w") as f:
+	with open(output_filename, "w+") as f:
 		json.dump(output, f)
+
 
 def input_validation(slice_filename, patterns_filename):
 	if not (os.path.exists(slice_filename)):
@@ -100,7 +106,6 @@ def input_validation(slice_filename, patterns_filename):
 		exit(1)
 	else:
 		print("Success!")
-		
 
 
 def main():

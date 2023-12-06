@@ -1,5 +1,6 @@
 from multi_label import MultiLabel
 
+
 # Lab 2
 class MultiLabelling:
 	def __init__(self):
